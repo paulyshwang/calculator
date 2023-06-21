@@ -1,4 +1,4 @@
-let operator = "";
+let operator = null;
 let firstNum = "";
 let secondNum = "";
 let displayVal = "";
@@ -52,13 +52,15 @@ for (let symbol of operators) {
   symbol.addEventListener("click", () => {
     // Only updates operator if secondNum hasn't been inputted
     if (operator && secondNum === "") {
-      operator = symbol.textContent;
+      operator.classList.remove("highlighted");
+      operator = symbol;
+      operator.classList.add("highlighted");
       return;
     }
 
     if (waiting) {
       // Same code as below
-      displayVal = operate(operator, +firstNum, +secondNum);
+      displayVal = operate(operator.textContent, +firstNum, +secondNum);
       div.textContent = displayVal;
       clear();
 
@@ -70,7 +72,8 @@ for (let symbol of operators) {
       console.log("First Number = " + firstNum);
     }
     
-    operator = symbol.textContent;
+    operator = symbol;
+    operator.classList.add("highlighted");
     waiting = true;
 
   });
@@ -84,7 +87,7 @@ equals.addEventListener("click", () => {
 
   if (waiting) {
     // Same code as above
-    displayVal = operate(operator, +firstNum, +secondNum);
+    displayVal = operate(operator.textContent, +firstNum, +secondNum);
     div.textContent = displayVal;
     clear();
 
@@ -94,7 +97,8 @@ equals.addEventListener("click", () => {
 });
 
 function clear() {
-  operator = "";
+  operator.classList.remove("highlighted");
+  operator = null;
   firstNum = "";
   secondNum = "";
   displayVal = "";
