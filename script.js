@@ -1,6 +1,8 @@
 let operator = "";
-let firstNum = 0;
-let secondNum = 0;
+let firstNum = "";
+let secondNum = "";
+let displayVal = "";
+let waiting = false;
 
 function add(a, b) {
   return a + b;
@@ -25,10 +27,76 @@ function operate(operator, firstNum, secondNum) {
   if (operator === "/") return divide(firstNum, secondNum);
 };
 
+const div = document.querySelector(".display");
+const numbers = document.querySelector(".numbers").children;
+const operators = document.querySelector(".operators").children;
+const equals = document.querySelector(".equals");
+
 function display(value) {
-  console.log(value);
+  if (waiting) {
+    secondNum += value;
+    div.textContent = secondNum;
+    console.log("Second Number =" + secondNum);
+  } else {
+    firstNum += value;
+    div.textContent = firstNum;
+    console.log("First Number = " + firstNum);
+  }
 };
 
-const button = document.querySelectorAll("button");
+for (let number of numbers) {
+  number.addEventListener("click", () => display(number.textContent));
+};
 
-button.forEach(item => item.addEventListener("click", () => display(item.textContent)));
+for (let symbol of operators) {
+  symbol.addEventListener("click", () => {
+    // Only updates operator if secondNum hasn't been inputted
+    if (operator && secondNum === "") {
+      operator = symbol.textContent;
+      return;
+    }
+
+    if (waiting) {
+      // Same code as below
+      displayVal = operate(operator, +firstNum, +secondNum);
+      div.textContent = displayVal;
+      clear();
+
+      // Makes sure you use result of last operation as first number..? 2*3/4/
+      firstNum = div.textContent;
+
+    } else {
+      firstNum = div.textContent;
+      console.log("First Number = " + firstNum);
+    }
+    
+    operator = symbol.textContent;
+    waiting = true;
+
+  });
+};
+
+equals.addEventListener("click", () => {
+  // Only operates if both operator and a secondNum has been inputted
+  if (operator && secondNum === "") {
+    return;
+  }
+
+  if (waiting) {
+    // Same code as above
+    displayVal = operate(operator, +firstNum, +secondNum);
+    div.textContent = displayVal;
+    clear();
+
+    // If uncommented, this concatenates any new digits to result of last operation, which we don't want
+    // firstNum = div.textContent;
+  }
+});
+
+function clear() {
+  operator = "";
+  firstNum = "";
+  secondNum = "";
+  displayVal = "";
+  waiting = false;
+};
