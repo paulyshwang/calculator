@@ -31,6 +31,7 @@ const div = document.querySelector(".display");
 const numbers = document.querySelector(".numbers").children;
 const operators = document.querySelector(".operators").children;
 const equals = document.querySelector(".equals");
+const clearButton = document.querySelector(".clear");
 
 function display(value) {
   if (waiting) {
@@ -97,10 +98,15 @@ equals.addEventListener("click", () => {
 });
 
 function clear() {
-  operator.classList.remove("highlighted");
+  if (operator) operator.classList.remove("highlighted");
   operator = null;
   firstNum = "";
   secondNum = "";
   displayVal = "";
   waiting = false;
 };
+
+clearButton.addEventListener("click", () => {
+  clear();
+  div.textContent = "0";
+});
