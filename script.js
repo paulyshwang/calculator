@@ -21,10 +21,18 @@ function divide(a, b) {
 };
 
 function operate(operator, firstNum, secondNum) {
+  if (isNaN(firstNum) || isNaN(secondNum)) return "Error";
+  
   if (operator === "+") return add(firstNum, secondNum);
   if (operator === "-") return subtract(firstNum, secondNum);
   if (operator === "*") return multiply(firstNum, secondNum);
-  if (operator === "/") return divide(firstNum, secondNum);
+  if (operator === "/") {
+    if (secondNum === 0) {
+      return "Error";
+    } else {
+      return divide(firstNum, secondNum);
+    }
+  };
 };
 
 const div = document.querySelector(".display");
