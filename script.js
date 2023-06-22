@@ -22,7 +22,7 @@ function divide(a, b) {
 
 function operate(operator, firstNum, secondNum) {
   if (isNaN(firstNum) || isNaN(secondNum)) return "Error";
-  
+
   if (operator === "+") return add(firstNum, secondNum);
   if (operator === "-") return subtract(firstNum, secondNum);
   if (operator === "*") return multiply(firstNum, secondNum);
@@ -42,6 +42,31 @@ const equals = document.querySelector(".equals");
 const clearButton = document.querySelector(".clear");
 
 function display(value) {
+  if (value === ".") {
+    if (waiting) {
+      // case when display includes decimal but want to input new 0.something
+      if (!secondNum) {
+        secondNum += "0.";
+        div.textContent = secondNum;
+        console.log("Second Number =" + secondNum);
+        return;
+      } else {
+        // case when secondNum already includes decimal
+        if (div.textContent.includes(".")) return;
+      }
+    } else {
+      // case when firstNum already includes decimal
+      if (div.textContent.includes(".")) return;
+      // case when display shows 0 or Error (or any NaN) and want to append decimal to 0
+      if (div.textContent === "0" || isNaN(div.textContent)) {
+        firstNum += "0.";
+        div.textContent = firstNum;
+        console.log("First Number = " + firstNum);
+        return;
+      }
+    }
+  }
+
   if (waiting) {
     secondNum += value;
     div.textContent = secondNum;
