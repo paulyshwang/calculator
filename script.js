@@ -40,6 +40,8 @@ const numbers = document.querySelector(".numbers").children;
 const operators = document.querySelector(".operators").children;
 const equals = document.querySelector(".equals");
 const clearButton = document.querySelector(".clear");
+const negativeButton = document.querySelector(".negative");
+const percentButton = document.querySelector(".percent");
 
 function display(value) {
   if (value === ".") {
@@ -142,4 +144,45 @@ function clear() {
 clearButton.addEventListener("click", () => {
   clear();
   div.textContent = "0";
+});
+
+negativeButton.addEventListener("click", () => {
+  if (waiting) {
+    // Not sure if both cases of zero are necessary, but both are left just in case
+    if (secondNum === "" || secondNum === "0" || secondNum === 0) {
+      secondNum = "-0"
+      div.textContent = secondNum;
+      console.log("Second Number = " + secondNum);
+    } else {
+      secondNum = -(+secondNum);
+      div.textContent = secondNum;
+      console.log("Second Number =" + secondNum);
+    }
+  } else {
+    firstNum = div.textContent;
+    firstNum = -(+firstNum);
+    div.textContent = firstNum;
+    console.log("First Number = " + firstNum);
+  }
+});
+
+percentButton.addEventListener("click", () => {
+  if (waiting) {
+    // Grabs display value as secondNum when secondNum has not been inputted yet
+    if (secondNum === "") {
+      secondNum = div.textContent;
+      secondNum = +secondNum / 100;
+      div.textContent = secondNum;
+      console.log("Second Number =" + secondNum);
+    } else {
+      secondNum = +secondNum / 100;
+      div.textContent = secondNum;
+      console.log("Second Number =" + secondNum);
+    }
+  } else {
+    firstNum = div.textContent;
+    firstNum = +firstNum / 100;
+    div.textContent = firstNum;
+    console.log("First Number = " + firstNum);
+  }
 });
