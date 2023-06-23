@@ -178,7 +178,7 @@ negativeButton.addEventListener("click", () => {
   if (waiting) {
     // Not sure if both cases of zero are necessary, but both are left just in case
     if (secondNum === "" || secondNum === "0" || secondNum === 0) {
-      secondNum = "-0"
+      secondNum = "-0";
       div.textContent = secondNum;
       console.log("Second Number = " + secondNum);
     } else {
@@ -188,9 +188,18 @@ negativeButton.addEventListener("click", () => {
     }
   } else {
     firstNum = div.textContent;
-    firstNum = -(+firstNum);
-    div.textContent = firstNum;
     console.log("First Number = " + firstNum);
+
+    if (firstNum === "" || firstNum === "0" || firstNum === 0) {
+      firstNum = "-0";
+      div.textContent = firstNum;
+      console.log("FirstNumber = " + firstNum);
+    } else {
+      firstNum = div.textContent;
+      firstNum = -(+firstNum);
+      div.textContent = firstNum;
+      console.log("First Number = " + firstNum);
+    }
   }
 });
 
