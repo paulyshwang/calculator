@@ -47,8 +47,8 @@ function display(value) {
   if (value === ".") {
     if (waiting) {
       // case when display includes decimal but want to input new 0.something
-      if (!secondNum) {
-        secondNum += "0.";
+      if (!secondNum || secondNum === "0" || secondNum === 0) {
+        secondNum = "0.";
         div.textContent = secondNum;
         console.log("Second Number =" + secondNum);
         return;
@@ -57,23 +57,51 @@ function display(value) {
         if (div.textContent.includes(".")) return;
       }
     } else {
-      // case when firstNum already includes decimal
-      if (div.textContent.includes(".")) return;
-      // case when display shows 0 or Error (or any NaN) and want to append decimal to 0
-      if (div.textContent === "0" || isNaN(div.textContent)) {
-        firstNum += "0.";
+      // case when firstNum doesn't exist, or display shows 0 or Error (or any NaN) and want to append decimal to 0
+      if (!firstNum || div.textContent === "0" || isNaN(div.textContent)) {
+        firstNum = "0.";
         div.textContent = firstNum;
         console.log("First Number = " + firstNum);
         return;
       }
+      // case when firstNum already includes decimal
+      if (div.textContent.includes(".")) return;
     }
   }
 
   if (waiting) {
+    // Prevent leading zeros
+    if (value === "0") {
+      if (secondNum === "0" || secondNum === 0) return;
+    }
+    if (secondNum === "0" || secondNum === 0) {
+      secondNum = value;
+      div.textContent = secondNum;
+      return;
+    } else if (secondNum === "-0") {
+      secondNum = -value;
+      div.textContent = secondNum;
+      return;
+    }
+
     secondNum += value;
     div.textContent = secondNum;
     console.log("Second Number =" + secondNum);
   } else {
+    // Prevent leading zeros
+    if (value === "0") {
+      if (firstNum === "0" || firstNum === 0) return;
+    }
+    if (firstNum === "0" || firstNum === 0) {
+      firstNum = value;
+      div.textContent = firstNum;
+      return;
+    } else if (firstNum === "-0") {
+      firstNum = -value;
+      div.textContent = firstNum;
+      return;
+    }
+
     firstNum += value;
     div.textContent = firstNum;
     console.log("First Number = " + firstNum);
