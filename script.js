@@ -5,19 +5,19 @@ let displayVal = "";
 let waiting = false;
 
 function add(a, b) {
-  return a + b;
+  return roundNumber(a + b, 5);
 };
 
 function subtract(a, b) {
-  return a - b;
+  return roundNumber(a - b, 5);
 };
 
 function multiply(a, b) {
-  return a * b;
+  return roundNumber(a * b, 5);
 };
 
 function divide(a, b) {
-  return a / b;
+  return roundNumber(a / b, 5);
 };
 
 function operate(operator, firstNum, secondNum) {
@@ -223,3 +223,30 @@ percentButton.addEventListener("click", () => {
     console.log("First Number = " + firstNum);
   }
 });
+
+function roundNumber(value) {
+  const maxLength = 9;
+  let places = 0;
+
+  // If number of digits (regardless of sign) is greater than 9 use scientific notation
+  if (Math.abs(value) >= 1e+9 || Math.abs(value) < 1e-8) {
+    let scientificParts = value.toExponential().split("e");
+    // Subtract 2 to account for "e" in resulting string and number before decimal point
+    // (+/- is already included in scientificParts[1])
+    places = maxLength - scientificParts[1].length - 2;
+    // parseFloat gets rid of any trailing zeros
+    let scientific = parseFloat(Number(scientificParts[0]).toFixed(places)) + "e" + scientificParts[1];
+    return scientific;
+  }
+  
+  let roundedParts = value.toString().split(".");
+
+  if (roundedParts[0].startsWith("-")) {
+    places = maxLength - roundedParts[0].length + 1;
+  } else {
+    places = maxLength - roundedParts[0].length;
+  }
+
+  let rounded = parseFloat(value.toFixed(places));
+  return rounded;
+};
