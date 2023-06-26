@@ -1,3 +1,6 @@
+let lastOperator = null;
+let lastSecondNum = "";
+
 let operator = null;
 let firstNum = "";
 let secondNum = "";
@@ -145,8 +148,25 @@ for (let symbol of operators) {
 };
 
 equals.addEventListener("click", () => {
+  if (!waiting && lastOperator && lastSecondNum) {
+    firstNum = div.textContent;
+    displayVal = operate(lastOperator.textContent, +firstNum, +lastSecondNum);
+    div.textContent = displayVal;
+    
+    // clear firstNum so that decimal and additional number don't add onto last firstNum
+    firstNum = "";
+
+    // If uncommented, this block fires only once because lastOperator and lastSecondNum get reset
+    // allClear();
+    return;
+  }
+  
   // Only operates if both operator and a secondNum has been inputted
   if (operator && secondNum === "") {
+    secondNum = firstNum;
+    displayVal = operate(operator.textContent, +firstNum, +secondNum);
+    div.textContent = displayVal;
+    allClear();
     return;
   }
 
@@ -162,6 +182,9 @@ equals.addEventListener("click", () => {
 });
 
 function allClear() {
+  lastOperator = operator;
+  lastSecondNum = secondNum;
+
   if (operator) operator.classList.remove("highlighted");
   operator = null;
   firstNum = "";
