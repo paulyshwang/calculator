@@ -230,7 +230,7 @@ function roundNumber(value) {
   let places = 0;
 
   // If number of digits (regardless of sign) is greater than 9 use scientific notation
-  if (Math.abs(value) >= 1e+9 || Math.abs(value) < 1e-8) {
+  if (value !== 0 && (Math.abs(value) >= 1e+9 || Math.abs(value) < 1e-8)) {
     let scientificParts = value.toExponential().split("e");
     // Subtract 2 to account for "e" in resulting string and number before decimal point
     // (+/- is already included in scientificParts[1])
