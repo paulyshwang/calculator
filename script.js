@@ -39,9 +39,10 @@ const div = document.querySelector(".display");
 const numbers = document.querySelector(".numbers").children;
 const operators = document.querySelector(".operators").children;
 const equals = document.querySelector(".equals");
-const clearButton = document.querySelector(".clear");
+const allClearButton = document.querySelector(".all-clear");
 const negativeButton = document.querySelector(".negative");
 const percentButton = document.querySelector(".percent");
+const clearButton = document.querySelector(".clear");
 
 function display(value) {
   if (value === ".") {
@@ -126,7 +127,7 @@ for (let symbol of operators) {
       // Same code as below
       displayVal = operate(operator.textContent, +firstNum, +secondNum);
       div.textContent = displayVal;
-      clear();
+      allClear();
 
       // Makes sure you use result of last operation as first number..? 2*3/4/
       firstNum = div.textContent;
@@ -153,14 +154,14 @@ equals.addEventListener("click", () => {
     // Same code as above
     displayVal = operate(operator.textContent, +firstNum, +secondNum);
     div.textContent = displayVal;
-    clear();
+    allClear();
 
     // If uncommented, this concatenates any new digits to result of last operation, which we don't want
     // firstNum = div.textContent;
   }
 });
 
-function clear() {
+function allClear() {
   if (operator) operator.classList.remove("highlighted");
   operator = null;
   firstNum = "";
@@ -169,8 +170,8 @@ function clear() {
   waiting = false;
 };
 
-clearButton.addEventListener("click", () => {
-  clear();
+allClearButton.addEventListener("click", () => {
+  allClear();
   div.textContent = "0";
 });
 
@@ -250,3 +251,15 @@ function roundNumber(value) {
   let rounded = parseFloat(value.toFixed(places));
   return rounded;
 };
+
+clearButton.addEventListener("click", () => {
+  if (waiting) {
+    secondNum = "0";
+    displayVal = secondNum;
+    div.textContent = displayVal;
+  } else {
+    firstNum = "0";
+    displayVal = firstNum;
+    div.textContent = displayVal;
+  }
+});
