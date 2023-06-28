@@ -100,9 +100,9 @@ function setDecimal() {
 function setOperator(button) {
     // Only updates operator if secondNum hasn't been inputted
     if (operator && secondNum === "") {
-      operator.classList.remove("highlighted");
+      operator.classList.remove("active");
       operator = button;
-      operator.classList.add("highlighted");
+      operator.classList.add("active");
       return;
     }
 
@@ -118,7 +118,7 @@ function setOperator(button) {
     }
     
     operator = button;
-    operator.classList.add("highlighted");
+    operator.classList.add("active");
     waiting = true;
 };
 
@@ -225,7 +225,7 @@ function clear() {
 function allClear() {
   lastOperator = operator;
   lastSecondNum = secondNum;
-  if (operator) operator.classList.remove("highlighted");
+  if (operator) operator.classList.remove("active");
   operator = null;
   firstNum = "";
   secondNum = "";
