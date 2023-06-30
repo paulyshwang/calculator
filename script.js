@@ -1,7 +1,7 @@
 // Constants
 const display = document.querySelector(".display");
-const numberButtons = document.querySelector(".numbers").children;
-const operatorButtons = document.querySelector(".operators").children;
+const numberButtons = document.querySelectorAll(".number");
+const operatorButtons = document.querySelectorAll(".operator");
 const equalsButton = document.querySelector(".equals");
 const negativeButton = document.querySelector(".negative");
 const percentButton = document.querySelector(".percent");
