@@ -49,7 +49,8 @@ function setDigit(value) {
     if (secondNum === "0" || secondNum === 0) {
       secondNum = value;
     } else if (secondNum === "-0") {
-      secondNum = -value;
+      secondNum = "-" + value;
+      console.log(typeof(secondNum));
     } else {
       secondNum += value;
     }
@@ -61,7 +62,8 @@ function setDigit(value) {
     if (firstNum === "0" || firstNum === 0) {
       firstNum = value;
     } else if (firstNum === "-0") {
-      firstNum = -value;
+      firstNum = "-" + value;
+      console.log(typeof(firstNum));
     } else {
       firstNum += value;
     }
@@ -176,11 +178,13 @@ function setPercent() {
     // Grabs display value as secondNum when secondNum has not been inputted yet
     if (secondNum === "") secondNum = display.textContent;
 
-    secondNum = +secondNum / 100;
+    secondNum = (+secondNum / 100).toString();
+    console.log(typeof(secondNum));
     display.textContent = secondNum;
   } else {
     firstNum = display.textContent;
-    firstNum = +firstNum / 100;
+    firstNum = (+firstNum / 100).toString();
+    console.log(typeof(firstNum));
     display.textContent = firstNum;
   }
 };
