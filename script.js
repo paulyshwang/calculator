@@ -151,24 +151,35 @@ function evaluate() {
 
 function toggleSign() {
   if (waiting) {
-    // Not sure if both cases of zero are necessary, but both are left just in case
-    if (secondNum === "" || secondNum === "0" || secondNum === 0) {
+    if (secondNum === "") {
       secondNum = "-0";
       display.textContent = secondNum;
+    } else if (secondNum[0] === "-") {
+      secondNum = secondNum.slice(1);
+      display.textContent = secondNum;
     } else {
-      secondNum = -(+secondNum);
+      secondNum = "-" + secondNum;
       display.textContent = secondNum;
     }
   } else {
-    firstNum = display.textContent;
-
-    if (firstNum === "" || firstNum === "0" || firstNum === 0) {
-      firstNum = "-0";
-      display.textContent = firstNum;
+    // If lastOperator or lastSecondNum exists (i.e. a result is in the display) AND firstNum 
+    // is not yet assigned, toggleSign() only on display value without assigning to firstNum
+    if ((lastOperator || lastSecondNum) && firstNum === "") {
+      if (display.textContent[0] === "-") {
+        display.textContent = display.textContent.slice(1);
+      } else {
+        display.textContent = "-" + display.textContent;
+      }
     } else {
       firstNum = display.textContent;
-      firstNum = -(+firstNum);
-      display.textContent = firstNum;
+      
+      if (firstNum[0] === "-") {
+        firstNum = firstNum.slice(1);
+        display.textContent = firstNum;
+      } else {
+        firstNum = "-" + firstNum;
+        display.textContent = firstNum;
+      }
     }
   }
 };
