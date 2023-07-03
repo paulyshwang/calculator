@@ -44,27 +44,25 @@ allClearButton.addEventListener("click", () => {
 function setDigit(value) {
   if (waiting) {
     // Prevent leading zeros
-    if (value === "0" && (secondNum === "0" || secondNum === 0)) return;
+    if (value === "0" && secondNum === "0") return;
 
-    if (secondNum === "0" || secondNum === 0) {
+    if (secondNum === "0") {
       secondNum = value;
     } else if (secondNum === "-0") {
       secondNum = "-" + value;
-      console.log(typeof(secondNum));
-    } else {
+    } else if (countDigits(secondNum) < 9) {
       secondNum += value;
     }
     display.textContent = secondNum;
   } else {
     // Prevent leading zeros
-    if (value === "0" && (firstNum === "0" || firstNum === 0)) return;
+    if (value === "0" && firstNum === "0") return;
 
-    if (firstNum === "0" || firstNum === 0) {
+    if (firstNum === "0") {
       firstNum = value;
     } else if (firstNum === "-0") {
       firstNum = "-" + value;
-      console.log(typeof(firstNum));
-    } else {
+    } else if (countDigits(firstNum) < 9) {
       firstNum += value;
     }
     display.textContent = firstNum;
@@ -80,6 +78,8 @@ function setDecimal() {
       // If secondNum already includes decimal, return
       // Comes after initial if statement in case current display value includes decimal AND secondNum is not set
       return;
+    } else if (countDigits(secondNum) >= 9) {
+      return;
     }
 
     secondNum += ".";
@@ -91,6 +91,8 @@ function setDecimal() {
     } else if (display.textContent.includes(".")) {
       // If firstNum already includes decimal, return
       // Comes after initial if statement in case current display value includes decimal AND firstNum is not set
+      return;
+    } else if (countDigits(firstNum) >= 9) {
       return;
     }
 
@@ -125,15 +127,17 @@ function setOperator(button) {
 };
 
 function evaluate() {
-  if (!waiting && lastOperator && lastSecondNum) {
-    firstNum = display.textContent;
-    display.textContent = operate(lastOperator.textContent, +firstNum, +lastSecondNum);
-    
-    // clear firstNum so that decimal and additional number don't add onto last firstNum
-    firstNum = "";
-
-    // If uncommented, this block fires only once because lastOperator and lastSecondNum get reset
-    // allClear();
+  if (!waiting) {
+    if (lastOperator && lastSecondNum) {
+      firstNum = display.textContent;
+      display.textContent = operate(lastOperator.textContent, +firstNum, +lastSecondNum);
+      
+      // Clear firstNum so that decimal and additional number don't add onto last firstNum
+      firstNum = "";
+    } else {
+      // Clear firstNum so that decimal and additional number don't add onto last firstNum
+      firstNum = "";
+    }
   } else if (operator && secondNum === "") {
     // Only operates if both operator and a secondNum has been inputted
     secondNum = firstNum;
@@ -143,9 +147,6 @@ function evaluate() {
     // Same code as above
     display.textContent = operate(operator.textContent, +firstNum, +secondNum);
     allClear();
-
-    // If uncommented, this concatenates any new digits to result of last operation, which we don't want
-    // firstNum = display.textContent;
   }
 };
 
@@ -185,17 +186,17 @@ function toggleSign() {
 };
 
 function setPercent() {
+  if (isNaN(display.textContent)) return;
+  
   if (waiting) {
     // Grabs display value as secondNum when secondNum has not been inputted yet
     if (secondNum === "") secondNum = display.textContent;
 
     secondNum = (+secondNum / 100).toString();
-    console.log(typeof(secondNum));
     display.textContent = secondNum;
   } else {
     firstNum = display.textContent;
     firstNum = (+firstNum / 100).toString();
-    console.log(typeof(firstNum));
     display.textContent = firstNum;
   }
 };
@@ -225,6 +226,12 @@ function roundNumber(value) {
 
   let rounded = parseFloat(value.toFixed(places));
   return rounded;
+};
+
+function countDigits(str) {
+  const digitRegex = /\d/g;
+  const digits = str.match(digitRegex);
+  return digits ? digits.length : 0;
 };
 
 function clear() {
@@ -266,14 +273,14 @@ function divide(a, b) {
 function operate(operator, firstNum, secondNum) {
   if (isNaN(firstNum) || isNaN(secondNum)) return "Error";
 
-  if (operator === "+") return add(firstNum, secondNum);
-  if (operator === "-") return subtract(firstNum, secondNum);
-  if (operator === "*") return multiply(firstNum, secondNum);
-  if (operator === "/") {
-    if (secondNum === 0) {
-      return "Error";
-    } else {
-      return divide(firstNum, secondNum);
-    }
-  };
+  switch(operator) {
+    case "+":
+      return add(firstNum, secondNum);
+    case "-":
+      return subtract(firstNum, secondNum);
+    case "*":
+      return multiply(firstNum, secondNum);
+    case "/":
+      return (secondNum === 0) ? "Error" : divide(firstNum, secondNum);
+  }
 };
