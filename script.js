@@ -15,6 +15,7 @@ let operator = null;
 let firstNum = "";
 let secondNum = "";
 let waiting = false;
+let result = NaN;
 
 // Event Listeners
 for (let button of numberButtons) {
@@ -38,6 +39,7 @@ clearButton.addEventListener("click", clear);
 allClearButton.addEventListener("click", () => {
   allClear();
   display.textContent = "0";
+  result = NaN;
 });
 
 // Functions
@@ -55,6 +57,9 @@ function setDigit(value) {
     }
     display.textContent = secondNum;
   } else {
+    // Reset result if appending to a new firstNum
+    if (!firstNum) result = NaN;
+
     // Prevent leading zeros
     if (value === "0" && firstNum === "0") return;
 
@@ -102,23 +107,30 @@ function setDecimal() {
 };
 
 function setOperator(button) {
-    // Only updates operator if secondNum hasn't been inputted
-    if (operator && secondNum === "") {
-      operator.classList.remove("active");
-      operator = button;
-      operator.classList.add("active");
-      return;
-    }
-
     if (waiting) {
+      // If secondNum has not been set, update operator only
+      if (!secondNum) {
+        operator.classList.remove("active");
+        operator = button;
+        operator.classList.add("active");
+        return;
+      }
+
       // Same code as below
-      display.textContent = operate(operator.textContent, +firstNum, +secondNum);
+      result = operate(operator.textContent, +firstNum, +secondNum);
+      display.textContent = roundNumber(result);
       allClear();
 
       // Makes sure you use result of last operation as first number..? 2*3/4/
-      firstNum = display.textContent;
+      firstNum = result.toString();
     } else {
-      firstNum = display.textContent;
+      if (!firstNum) {
+        if (result) {
+          firstNum = result.toString();
+        } else {
+          firstNum = display.textContent;
+        }
+      }
     }
     
     operator = button;
@@ -127,10 +139,31 @@ function setOperator(button) {
 };
 
 function evaluate() {
-  if (!waiting) {
+  if (waiting) {
+    if (!secondNum) {
+      if (result) {
+        secondNum = result.toString();
+      } else {
+        secondNum = display.textContent
+      }
+    }
+
+    // Same code as above
+    result = operate(operator.textContent, +firstNum, +secondNum);
+    display.textContent = roundNumber(result);
+    allClear();
+  } else {
     if (lastOperator && lastSecondNum) {
-      firstNum = display.textContent;
-      display.textContent = operate(lastOperator.textContent, +firstNum, +lastSecondNum);
+      if (!firstNum) {
+        if (result) {
+          firstNum = result.toString();
+        } else {
+          firstNum = display.textContent;
+        }
+      }
+
+      result = operate(lastOperator.textContent, +firstNum, +lastSecondNum);
+      display.textContent = roundNumber(result);
       
       // Clear firstNum so that decimal and additional number don't add onto last firstNum
       firstNum = "";
@@ -138,21 +171,12 @@ function evaluate() {
       // Clear firstNum so that decimal and additional number don't add onto last firstNum
       firstNum = "";
     }
-  } else if (operator && secondNum === "") {
-    // Only operates if both operator and a secondNum has been inputted
-    secondNum = firstNum;
-    display.textContent = operate(operator.textContent, +firstNum, +secondNum);
-    allClear();
-  } else if (waiting) {
-    // Same code as above
-    display.textContent = operate(operator.textContent, +firstNum, +secondNum);
-    allClear();
   }
 };
 
 function toggleSign() {
   if (waiting) {
-    if (secondNum === "") {
+    if (!secondNum) {
       secondNum = "-0";
       display.textContent = secondNum;
     } else if (secondNum[0] === "-") {
@@ -165,12 +189,9 @@ function toggleSign() {
   } else {
     // If lastOperator or lastSecondNum exists (i.e. a result is in the display) AND firstNum 
     // is not yet assigned, toggleSign() only on display value without assigning to firstNum
-    if ((lastOperator || lastSecondNum) && firstNum === "") {
-      if (display.textContent[0] === "-") {
-        display.textContent = display.textContent.slice(1);
-      } else {
-        display.textContent = "-" + display.textContent;
-      }
+    if ((lastOperator || lastSecondNum) && !firstNum) {
+      result = -result;
+      display.textContent = roundNumber(result);
     } else {
       firstNum = display.textContent;
       
@@ -189,24 +210,34 @@ function setPercent() {
   if (isNaN(display.textContent)) return;
   
   if (waiting) {
-    // Grabs display value as secondNum when secondNum has not been inputted yet
-    if (secondNum === "") secondNum = display.textContent;
-
-    secondNum = (+secondNum / 100).toString();
-    display.textContent = secondNum;
+    if (!secondNum && result) {
+      result = divide(result, 100);
+      display.textContent = roundNumber(result);
+    } else {
+      result = divide(+display.textContent, 100);
+      display.textContent = roundNumber(result);
+      secondNum = "";
+    }
   } else {
-    firstNum = display.textContent;
-    firstNum = (+firstNum / 100).toString();
-    display.textContent = firstNum;
+    if (!firstNum && result) {
+      result = divide(result, 100);
+      display.textContent = roundNumber(result);
+    } else {
+      result = divide(+display.textContent, 100);
+      display.textContent = roundNumber(result);
+      firstNum = "";
+    }
   }
 };
 
 function roundNumber(value) {
+  if (!isFinite(value)) return "Error";
+
   const maxLength = 9;
   let places = 0;
 
   // If number of digits (regardless of sign) is greater than 9 use scientific notation
-  if (value !== 0 && (Math.abs(value) >= 1e+9 || Math.abs(value) < 1e-8)) {
+  if (value.toString().includes("e") || (value !== 0 && (Math.abs(value) >= 1e+9 || Math.abs(value) < 1e-8))) {
     let scientificParts = value.toExponential().split("e");
     // Subtract 2 to account for "e" in resulting string and number before decimal point
     // (+/- is already included in scientificParts[1])
@@ -241,6 +272,7 @@ function clear() {
   } else {
     firstNum = "0";
     display.textContent = firstNum;
+    result = NaN;
   }
 };
 
@@ -255,19 +287,19 @@ function allClear() {
 };
 
 function add(a, b) {
-  return roundNumber(a + b, 5);
+  return a + b;
 };
 
 function subtract(a, b) {
-  return roundNumber(a - b, 5);
+  return a - b;
 };
 
 function multiply(a, b) {
-  return roundNumber(a * b, 5);
+  return a * b;
 };
 
 function divide(a, b) {
-  return roundNumber(a / b, 5);
+  return a / b;
 };
 
 function operate(operator, firstNum, secondNum) {
