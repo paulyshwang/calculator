@@ -5,8 +5,14 @@
 
   /* Color variables */
   --light-gray: #a6a6a7;
+  --light-gray-hover: #cbcbcd;
+  --light-gray-active: #e0e0e1;
   --dark-gray: #303030;
+  --dark-gray-hover: #525252;
+  --dark-gray-active: #666666;
   --orange: #ffa003;
+  --orange-hover: #ffb947;
+  --orange-active: #ffc870;
 }
 
 @supports (font-variation-settings: normal) {
@@ -17,49 +23,55 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  outline: 1px dotted red;
+  /* outline: 1px dotted red; */
 }
 
 body {
   display: flex;
   justify-content: center;
-  padding-top: 15vh;
+  padding-top: 10vh;
 
   /* align-items: center;
   height: 100vh; */
 }
 
 .calculator {
-  width: 400px;
-  height: 700px;
+  width: 368px; /* Must fit -4444444.44, which seems to be the longest input, pixel-wise */
+  /* height: 754px; */
+  height: 772px;
   display: grid;
-  align-content: end;
+  grid-template-rows: 1fr 3fr 5fr 1fr;
   color: white;
   background-color: black;
+  border-radius: 70px; /* Same as button width */
+  outline: 5px solid var(--light-gray);
 }
 
 .display {
   display: flex;
+  align-items: end;
   justify-content: end;
-  font-size: 4rem;
-  padding-right: 10px;
+  font-size: 3.6rem;
+  padding-right: 30px;
+  padding-bottom: 25px;
+  font-weight: 200;
 }
 
 .btn-container {
-  height: 500px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(4, 70px);
+  grid-template-rows: repeat(5, 70px);
+  justify-content: center;
+  gap: 12px;
 }
 
 button {
   border: none;
-  border-radius: 50px;
+  border-radius: 35px;
   color: white;
-  background-color: black;
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-family: inherit;
+  cursor: pointer;
 }
 
 .modifier {
@@ -67,23 +79,65 @@ button {
   background-color: var(--light-gray);
 }
 
+.modifier:hover {
+  background-color: var(--light-gray-hover);
+}
+
+.modifier:active {
+  background-color: var(--light-gray-active);
+}
+
+.negative {
+  font-size: 2.5rem;
+  font-weight: 300;
+  padding-bottom: 7px;
+  padding-left: 1px;
+}
+
+.percent {
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
 .operator, .equals {
   background-color: var(--orange);
+  font-size: 2.7rem;
+  font-weight: 300;
+  padding-bottom: 7px;
+  padding-left: 0.5px;
+}
+
+.operator:hover, .equals:hover {
+  color: white;
+  background-color: var(--orange-hover);
+}
+
+.operator:active, .equals:active {
+  color: white;
+  background-color: var(--orange-active);
 }
 
 .number {
   background-color: var(--dark-gray);
+  font-weight: 300;
+}
+
+.number:hover {
+  background-color: var(--dark-gray-hover);
+}
+
+.number:active {
+  background-color: var(--dark-gray-active);
 }
 
 .zero {
   grid-column: 1 / 3;
-
   display: flex;
   align-items: center;
-  padding-left: 35px;
+  padding-left: 26px;
 }
 
 .active {
-  border-style: solid;
-  border-color: black;
+  color: var(--orange);
+  background-color: white;
 }

@@ -117,7 +117,7 @@ function setOperator(button) {
       }
 
       // Same code as below
-      result = operate(operator.textContent, +firstNum, +secondNum);
+      result = operate(operator.value, +firstNum, +secondNum);
       display.textContent = roundNumber(result);
       allClear();
 
@@ -144,12 +144,12 @@ function evaluate() {
       if (result) {
         secondNum = result.toString();
       } else {
-        secondNum = display.textContent
+        secondNum = display.textContent;
       }
     }
 
     // Same code as above
-    result = operate(operator.textContent, +firstNum, +secondNum);
+    result = operate(operator.value, +firstNum, +secondNum);
     display.textContent = roundNumber(result);
     allClear();
   } else {
@@ -162,7 +162,7 @@ function evaluate() {
         }
       }
 
-      result = operate(lastOperator.textContent, +firstNum, +lastSecondNum);
+      result = operate(lastOperator.value, +firstNum, +lastSecondNum);
       display.textContent = roundNumber(result);
       
       // Clear firstNum so that decimal and additional number don't add onto last firstNum
