@@ -1,3 +1,18 @@
+/* Typeface from https://rsms.me/inter/ */
+:root {
+  font-family: Inter, sans-serif;
+  font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
+
+  /* Color variables */
+  --light-gray: #a6a6a7;
+  --dark-gray: #303030;
+  --orange: #ffa003;
+}
+
+@supports (font-variation-settings: normal) {
+  :root { font-family: InterVariable, sans-serif; }
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -19,6 +34,15 @@ body {
   height: 700px;
   display: grid;
   align-content: end;
+  color: white;
+  background-color: black;
+}
+
+.display {
+  display: flex;
+  justify-content: end;
+  font-size: 4rem;
+  padding-right: 10px;
 }
 
 .btn-container {
@@ -35,6 +59,20 @@ button {
   color: white;
   background-color: black;
   font-size: 2.5rem;
+  font-family: inherit;
+}
+
+.modifier {
+  color: black;
+  background-color: var(--light-gray);
+}
+
+.operator, .equals {
+  background-color: var(--orange);
+}
+
+.number {
+  background-color: var(--dark-gray);
 }
 
 .zero {
