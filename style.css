@@ -87,6 +87,10 @@ button {
   background-color: var(--light-gray-active);
 }
 
+.clear {
+  font-size: 1.8rem;
+}
+
 .negative {
   font-size: 2.5rem;
   font-weight: 300;

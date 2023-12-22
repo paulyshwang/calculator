@@ -6,7 +6,6 @@ const equalsButton = document.querySelector(".equals");
 const negativeButton = document.querySelector(".negative");
 const percentButton = document.querySelector(".percent");
 const clearButton = document.querySelector(".clear");
-const allClearButton = document.querySelector(".all-clear");
 
 // Variables
 let lastOperator = null;
@@ -20,10 +19,16 @@ let result = NaN;
 // Event Listeners
 for (let button of numberButtons) {
   button.addEventListener("click", () => {
-    if (button.textContent === ".") {
-      setDecimal();
+    if (button.textContent === "0") {
+      // Pressing 0 does not affect clear button
+      setDigit(button.textContent);
     } else {
-      setDigit(button.textContent)
+      if (button.textContent === ".") {
+        setDecimal();
+      } else {
+        setDigit(button.textContent);
+      }
+      clearButton.textContent = "C";
     }
   });
 };
@@ -35,11 +40,15 @@ for (let button of operatorButtons) {
 equalsButton.addEventListener("click", evaluate);
 negativeButton.addEventListener("click", toggleSign);
 percentButton.addEventListener("click", setPercent);
-clearButton.addEventListener("click", clear);
-allClearButton.addEventListener("click", () => {
-  allClear();
-  display.textContent = "0";
-  result = NaN;
+clearButton.addEventListener("click", () => {
+  if (clearButton.textContent === "AC") {
+    allClear();
+    display.textContent = "0";
+    result = NaN;
+  } else {
+    clear();
+    clearButton.textContent = "AC";
+  }
 });
 
 // Functions
@@ -202,7 +211,7 @@ function toggleSign() {
         firstNum = "-" + firstNum;
         display.textContent = firstNum;
       }
-      
+
       result = -result; 
     }
   }
