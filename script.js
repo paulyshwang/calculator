@@ -132,7 +132,7 @@ function setOperator(button) {
         }
       }
     }
-    
+
     operator = button;
     operator.classList.add("active");
     waiting = true;
@@ -194,7 +194,7 @@ function toggleSign() {
       display.textContent = roundNumber(result);
     } else {
       firstNum = display.textContent;
-      
+
       if (firstNum[0] === "-") {
         firstNum = firstNum.slice(1);
         display.textContent = firstNum;
@@ -202,6 +202,8 @@ function toggleSign() {
         firstNum = "-" + firstNum;
         display.textContent = firstNum;
       }
+      
+      result = -result; 
     }
   }
 };
@@ -216,7 +218,7 @@ function setPercent() {
     } else {
       result = divide(+display.textContent, 100);
       display.textContent = roundNumber(result);
-      secondNum = "";
+      secondNum = result;
     }
   } else {
     if (!firstNum && result) {
