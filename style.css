@@ -47,6 +47,29 @@ body {
   outline: 5px solid var(--light-gray);
 }
 
+.status-bar {
+  display: grid;
+  align-items: center;
+  justify-content: end;
+  padding-right: 40px;
+}
+
+.img-container {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 7px;
+}
+
+.img-container img {
+  filter: brightness(0) invert(1);
+  width: 17px;
+}
+
+.img-container .battery {
+  padding-top: 1px;
+  width: 22px;
+}
+
 .display {
   display: flex;
   align-items: end;
