@@ -3,14 +3,9 @@ const time = document.querySelector(".time");
 
 function currentTime() {
   const date = new Date();
-  const hours = date.getHours() % 12;
-  const minutes = date.getMinutes();
-
-  if (minutes < 10) {
-    time.textContent = hours + ":0" + minutes;
-  } else {
-    time.textContent = hours + ":" + minutes;
-  }
+  const hours = (date.getHours() % 12 === 0) ? 12 : date.getHours() % 12;
+  const minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+  time.textContent = hours + ":" + minutes;
 }
 
 currentTime();
