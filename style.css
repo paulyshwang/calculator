@@ -49,14 +49,24 @@ body {
 
 .status-bar {
   display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  justify-content: end;
-  padding-right: 40px;
+  justify-content: space-between;
+  gap: 55px;
+  padding-top: 5px;
+}
+
+.time {
+  display: flex;
+  justify-content: center;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
 }
 
 .img-container {
   display: grid;
   grid-auto-flow: column;
+  justify-content: center;
   gap: 7px;
 }
 

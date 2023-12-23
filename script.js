@@ -1,3 +1,22 @@
+/* STATUS BAR */
+const time = document.querySelector(".time");
+
+function currentTime() {
+  const date = new Date();
+  const hours = date.getHours() % 12;
+  const minutes = date.getMinutes();
+
+  if (minutes < 10) {
+    time.textContent = hours + ":0" + minutes;
+  } else {
+    time.textContent = hours + ":" + minutes;
+  }
+}
+
+currentTime();
+setInterval(currentTime, 1000);
+
+/* CALCULATOR */
 // Constants
 const display = document.querySelector(".display");
 const numberButtons = document.querySelectorAll(".number");
